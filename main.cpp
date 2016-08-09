@@ -116,7 +116,7 @@ Connector::Options *configure_endpoint(Connector::OptionsBuilder &config)
 
 // main entry point...
 int main()
-
+{
     // set Serial
     pc.baud(115200);
 	
