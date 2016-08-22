@@ -22,16 +22,16 @@
 
 // CUSTOMIZE ME: Define the core Device Types, Firmware, Hardware, Software information
 #define ENABLE_DEVICE_MANAGER	true				// true - enable, false - disable
-#define MY_DEVICE_MFG			"NXP"
-#define MY_DEVICE_TYPE			"mbed-endpoint"
-#define MY_DEVICE_MODEL			"K64F"
-#define MY_DEVICE_SERIAL 		"0123456789"
-#define MY_FIRMWARE_VERSION		"1.0.0"
-#define MY_HARDWARE_VERSION		"1.0.0"
-#define MY_SOFTWARE_VERSION		"1.0.0"
+#define MY_DEVICE_MFG		"NXP"
+#define MY_DEVICE_TYPE		"mbed-endpoint"
+#define MY_DEVICE_MODEL		"K64F"
+#define MY_DEVICE_SERIAL 	"0123456789"
+#define MY_FIRMWARE_VERSION	"1.0.0"
+#define MY_HARDWARE_VERSION	"1.0.0"
+#define MY_SOFTWARE_VERSION	"1.0.0"
 
 // Passphrase to supply for data management authentication
-#define MY_DM_PASSPHRASE		"arm1234"
+#define MY_DM_PASSPHRASE	"arm1234"
 
 // Include security.h
 #include "security.h"
@@ -86,32 +86,32 @@ Connector::Options *configure_endpoint(Connector::OptionsBuilder &config)
     // Build the endpoint configuration parameters
     logger.log("Endpoint::main (%s): customizing endpoint configuration...",net_get_type());
     return config                 
-                 // PROVISIONING: set the Provisioning Credentials (all from security.h)
-                 .setEndpointNodename(MBED_ENDPOINT_NAME)                  			
-                 .setDomain(MBED_DOMAIN)
-                 .setEndpointType(MY_DEVICE_TYPE)                               							  
-                 .setServerCertificate((uint8_t *)SERVER_CERT,(int)sizeof(SERVER_CERT))
-                 .setClientCertificate((uint8_t *)CERT,(int)sizeof(CERT))
-                 .setClientKey((uint8_t *)KEY,(int)sizeof(KEY))
+    	// PROVISIONING: set the Provisioning Credentials (all from security.h)
+        .setEndpointNodename(MBED_ENDPOINT_NAME)                  			
+        .setDomain(MBED_DOMAIN)
+        .setEndpointType(MY_DEVICE_TYPE)                               							  
+        .setServerCertificate((uint8_t *)SERVER_CERT,(int)sizeof(SERVER_CERT))
+        .setClientCertificate((uint8_t *)CERT,(int)sizeof(CERT))
+        .setClientKey((uint8_t *)KEY,(int)sizeof(KEY))
+                
+	// WiFi Setup (must set "network-interface" to "WIFI" in mbed_app.json)
+        .setWiFiSSID("changeme")                            	// WiFi: SSID
+        .setWiFiAuthType(WIFI_WPA2_PERSONAL)			// WiFi: Auth Type
+        .setWiFiAuthKey("changeme")               		// WiFi: WPA Password
                  
-		  // WiFi Setup (must set "network-interface" to "WIFI" in mbed_app.json)
-                 .setWiFiSSID("changeme")                            	// WiFi: SSID
-                 .setWiFiAuthType(WIFI_WPA2_PERSONAL)			// WiFi: Auth Type
-                 .setWiFiAuthKey("changeme")               		// WiFi: WPA Password
+        // add a Sample Static Resource
+        .addResource(&static_sample)
                  
-                 // add a Sample Static Resource
-                 .addResource(&static_sample)
-                 
-                 // add a Sample Counter (Dynamic Resource)
-                 .addResource(&sample_counter,10000)			// observe every 10 seconds
+        // add a Sample Counter (Dynamic Resource)
+        .addResource(&sample_counter,10000)			// observe every 10 seconds
                    
-                 // Add my specific physical dynamic resources...
-                 .addResource(&light)
-                 .addResource(&temperature,8000) 			// observe every 8 seconds 
-                 .addResource(&accel,13000)				// observe every 13 seconds 						
+        // Add my specific physical dynamic resources...
+        .addResource(&light)
+        .addResource(&temperature,8000) 			// observe every 8 seconds 
+        .addResource(&accel,13000)				// observe every 13 seconds 						
                    
-                 // finalize the configuration...
-                 .build();
+        // finalize the configuration...
+        .build();
 }
 
 // main entry point...
@@ -151,4 +151,3 @@ int main()
     // starts the endpoint by finalizing its configuration (configure_endpoint() above called),creating a Thread and reading mbed Cloud events...
     Connector::Endpoint::start();
 }
-
