@@ -22,16 +22,16 @@
 
 // CUSTOMIZE ME: Define the core Device Types, Firmware, Hardware, Software information
 #define ENABLE_DEVICE_MANAGER	true				// true - enable, false - disable
-#define MY_DEVICE_MFG		"NXP"
-#define MY_DEVICE_TYPE		"mbed-endpoint"
-#define MY_DEVICE_MODEL		"K64F"
-#define MY_DEVICE_SERIAL 	"0123456789"
-#define MY_FIRMWARE_VERSION	"1.0.0"
-#define MY_HARDWARE_VERSION	"1.0.0"
-#define MY_SOFTWARE_VERSION	"1.0.0"
+#define MY_DEVICE_MFG			"NXP"
+#define MY_DEVICE_TYPE			"mbed-endpoint"
+#define MY_DEVICE_MODEL			"K64F"
+#define MY_DEVICE_SERIAL 		"0123456789"
+#define MY_FIRMWARE_VERSION		"1.0.0"
+#define MY_HARDWARE_VERSION		"1.0.0"
+#define MY_SOFTWARE_VERSION		"1.0.0"
 
 // Passphrase to supply for data management authentication
-#define MY_DM_PASSPHRASE	"arm1234"
+#define MY_DM_PASSPHRASE		"arm1234"
 
 // Include security.h
 #include "security.h"
@@ -94,7 +94,7 @@ Connector::Options *configure_endpoint(Connector::OptionsBuilder &config)
         .setClientCertificate((uint8_t *)CERT,(int)sizeof(CERT))
         .setClientKey((uint8_t *)KEY,(int)sizeof(KEY))
                 
-	// WiFi Setup (must set "network-interface" to "WIFI" in mbed_app.json)
+		// WiFi Setup (must set "network-interface" to "WIFI" in mbed_app.json)
         .setWiFiSSID("changeme")                            	// WiFi: SSID
         .setWiFiAuthType(WIFI_WPA2_PERSONAL)			// WiFi: Auth Type
         .setWiFiAuthKey("changeme")               		// WiFi: WPA Password
