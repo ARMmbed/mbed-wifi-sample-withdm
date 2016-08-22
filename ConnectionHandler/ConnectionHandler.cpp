@@ -24,10 +24,10 @@
 #include "ConnectionHandler.h"
 
 // Forward declarations of public functions in mbedEndpointNetwork
- #include "mbed-connector-interface/mbedEndpointNetworkImpl.h"
+#include "mbed-connector-interface/mbedEndpointNetworkImpl.h"
 
 // Default constructor
-ConnectionHandler::ConnectionHandler() {
+ConnectionHandler::ConnectionHandler() : ConnectionStatusInterface() {
 }
 
 // Copy constructor
