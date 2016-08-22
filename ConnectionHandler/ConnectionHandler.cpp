@@ -31,7 +31,7 @@ ConnectionHandler::ConnectionHandler() {
 }
 
 // Copy constructor
-ConnectionHandler::ConnectionHandler(ConnectionHandler &ch) {
+ConnectionHandler::ConnectionHandler(ConnectionHandler &ch) : ConnectionStatusInterface(ch) {
 }
 
 // Destructor

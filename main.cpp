@@ -94,10 +94,10 @@ Connector::Options *configure_endpoint(Connector::OptionsBuilder &config)
         .setClientCertificate((uint8_t *)CERT,(int)sizeof(CERT))
         .setClientKey((uint8_t *)KEY,(int)sizeof(KEY))
                 
-		// WiFi Setup (must set "network-interface" to "WIFI" in mbed_app.json)
-        .setWiFiSSID("changeme")                            	// WiFi: SSID
+        // WiFi Setup (must set "network-interface" to "WIFI" in mbed_app.json)
+        .setWiFiSSID((char *)"changeme")                       	// WiFi: SSID
         .setWiFiAuthType(WIFI_WPA2_PERSONAL)			// WiFi: Auth Type
-        .setWiFiAuthKey("changeme")               		// WiFi: WPA Password
+        .setWiFiAuthKey((char *)"changeme")            		// WiFi: WPA Password
                  
         // add a Sample Static Resource
         .addResource(&static_sample)
