@@ -11,6 +11,14 @@
         "wifi-rx": {
             "help": "RX pin for serial connection to external device",
             "value": "D0"
+        },
+        "shutdown-button-enable":{
+            "help": "enable the K64F use of SWx for the deregistation/shutdown button",
+            "value": "true"
+        },
+        "shutdown-pin": {
+            "help": "which shutdown button should be used as the deregistation/shutdown button",
+            "value": "SW3"
         }
     },
     "macros": ["MBEDTLS_USER_CONFIG_FILE=\"mbedtls_mbed_client_config.h\""],
