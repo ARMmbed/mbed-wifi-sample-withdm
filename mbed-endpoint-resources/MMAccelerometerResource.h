@@ -1,6 +1,6 @@
 /**
- * @file    AccelerometerResource.h
- * @brief   mbed CoAP Endpoint Accelerometer sensor resource supporting CoAP GET
+ * @file    MMAccelerometerResource.h
+ * @brief   mbed CoAP Endpoint MMAccelerometer sensor resource supporting CoAP GET
  * @author  Doug Anson
  * @version 1.0
  * @see
@@ -20,8 +20,8 @@
  * limitations under the License.
  */
 
-#ifndef __ACCELEROMETER_RESOURCE_H__
-#define __ACCELEROMETER_RESOURCE_H__
+#ifndef __MM_ACCELEROMETER_RESOURCE_H__
+#define __MM_ACCELEROMETER_RESOURCE_H__
 
 // Base class
 #include "mbed-connector-interface/DynamicResource.h"
@@ -31,26 +31,26 @@
 static MMA7660 __accel(PTE25, PTE24);
 
 /** 
- * AccelerometerResource class
+ * MMAccelerometerResource class
  */
-class AccelerometerResource : public DynamicResource
+class MMAccelerometerResource : public DynamicResource
 {
 public:
     /**
     Default constructor
     @param logger input logger instance for this resource
-    @param obj_name input the Accelerometer Object name
-    @param res_name input the Accelerometer Resource name
+    @param obj_name input the MMAccelerometer Object name
+    @param res_name input the MMAccelerometer Resource name
     @param observable input the resource is Observable (default: FALSE)
     */
-    AccelerometerResource(const Logger *logger,const char *obj_name,const char *res_name,const bool observable = false) : DynamicResource(logger,obj_name,res_name,"Accelerometer",M2MBase::GET_ALLOWED,observable) {        
+    MMAccelerometerResource(const Logger *logger,const char *obj_name,const char *res_name,const bool observable = false) : DynamicResource(logger,obj_name,res_name,"Accelerometer",M2MBase::GET_ALLOWED,observable) {        
         // initialize the accelerometer
         __accel.setSampleRate(64);
         __accel.setActive(true);
     }
 
     /**
-    Get the value of the Accelerometer sensor
+    Get the value of the MMAccelerometer sensor
     @returns string containing the acclerometer sensor value
     */
     virtual string get() {
@@ -62,4 +62,4 @@ public:
     }
 };
 
-#endif // __ACCELEROMETER_RESOURCE_H__
+#endif // __MM_ACCELEROMETER_RESOURCE_H__
