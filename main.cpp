@@ -20,18 +20,24 @@
  * limitations under the License.
  */
 
+// Use K64F Accelerometer
+#define USE_K64F_ACCELEROMETER		true
+
+// Use mbedApplicationShield resources 
+#define USE_APP_SHIELD_RESOURCES	false
+
 // CUSTOMIZE ME: Define the core Device Types, Firmware, Hardware, Software information
-#define ENABLE_DEVICE_MANAGER	true				// true - enable, false - disable
-#define MY_DEVICE_MFG			"NXP"
-#define MY_DEVICE_TYPE			"mbed-endpoint"
-#define MY_DEVICE_MODEL			"K64F"
-#define MY_DEVICE_SERIAL 		"0123456789"
-#define MY_FIRMWARE_VERSION		"1.0.0"
-#define MY_HARDWARE_VERSION		"1.0.0"
-#define MY_SOFTWARE_VERSION		"1.0.0"
+#define ENABLE_DEVICE_MANAGER       true                       // true - enable, false - disable
+#define MY_DEVICE_MFG			    "NXP"
+#define MY_DEVICE_TYPE			    "mbed-endpoint"
+#define MY_DEVICE_MODEL			    "K64F"
+#define MY_DEVICE_SERIAL 		    "0123456789"
+#define MY_FIRMWARE_VERSION		    "1.0.0"
+#define MY_HARDWARE_VERSION		    "1.0.0"
+#define MY_SOFTWARE_VERSION		    "1.0.0"
 
 // Passphrase to supply for data management authentication
-#define MY_DM_PASSPHRASE		"arm1234"
+#define MY_DM_PASSPHRASE		    "arm1234"
 
 // Include security.h
 #include "security.h"
@@ -45,7 +51,7 @@ Serial pc(USBTX,USBRX);
 Logger logger(&pc);
 
 // ConnectionHandler support
-#define ENABLE_CONNECTION_HANDLER	true			// true - enable, false - disable
+#define ENABLE_CONNECTION_HANDLER	  true			// true - enable, false - disable
 #include "ConnectionHandler.h"
 
 // Include the default Device Management Responders
@@ -72,13 +78,23 @@ SampleDynamicResource sample_counter(&logger,"123","4567",true);			// "true" -> 
 #include "mbed-endpoint-resources/LightResource.h"
 LightResource light(&logger,"311","5850");
 
-// Temperature Resource
-#include "mbed-endpoint-resources/TemperatureResource.h"
-TemperatureResource temperature(&logger,"303","5700",true);         			// "true" --> resource is observable
+// AppShield has its own accelerometer and temperature sensors
+#if USE_APP_SHIELD_RESOURCES
+    // Temperature Resource
+    #include "mbed-endpoint-resources/TemperatureResource.h"
+    TemperatureResource temperature(&logger,"303","5700",true);            // "true" --> resource is observable
 
-// Accelerometer Resource
-#include "mbed-endpoint-resources/AccelerometerResource.h"
-AccelerometerResource accel(&logger,"888","7700",true);        				// "true" --> resource is observable
+    // MMA7660 Accelerometer Resource
+    #include "mbed-endpoint-resources/MMAccelerometerResource.h"
+    MMAccelerometerResource accel(&logger,"888","7700",true);              // "true" --> resource is observable
+#endif // USE_APP_SHIELD_RESOURCES
+
+// K64F has an embedded accelerometer
+#if USE_K64F_ACCELEROMETER
+    // FXQ Accelerometer Resource
+    #include "mbed-endpoint-resources/FXAccelerometerResource.h"
+    FXAccelerometerResource accel(&logger,"888","7700",true);              // "true" --> resource is observable
+#endif // USE_K64F_ACCELEROMETER
 
 // called from the Endpoint::start() below to create resources and the endpoint internals...
 Connector::Options *configure_endpoint(Connector::OptionsBuilder &config)
@@ -95,9 +111,9 @@ Connector::Options *configure_endpoint(Connector::OptionsBuilder &config)
         .setClientKey((uint8_t *)KEY,(int)sizeof(KEY))
                 
         // WiFi Setup (must set "network-interface" to "WIFI" in mbed_app.json)
-        .setWiFiSSID((char *)"changeme")                       	// WiFi: SSID
-        .setWiFiAuthType(WIFI_WPA2_PERSONAL)			// WiFi: Auth Type
-        .setWiFiAuthKey((char *)"changeme")            		// WiFi: WPA Password
+        .setWiFiSSID((char *)"changeme")            // WiFi: SSID
+        .setWiFiAuthType(WIFI_WPA2_PERSONAL)	    // WiFi: Auth Type
+        .setWiFiAuthKey((char *)"changeme")         // WiFi: WPA Password
                  
         // add a Sample Static Resource
         .addResource(&static_sample)
@@ -106,9 +122,22 @@ Connector::Options *configure_endpoint(Connector::OptionsBuilder &config)
         .addResource(&sample_counter,10000)			// observe every 10 seconds
                    
         // Add my specific physical dynamic resources...
+
+		// LED light that we can toggle on and off...
         .addResource(&light)
+
+#if USE_APP_SHIELD_RESOURCES
+		// Temperature sensor (LM75B)
         .addResource(&temperature,8000) 			// observe every 8 seconds 
-        .addResource(&accel,13000)				// observe every 13 seconds 						
+
+		// MMA7660 Accelerometer
+        .addResource(&accel,13000)				    // observe every 13 seconds
+#endif // USE_APP_SHIELD_RESOURCES
+
+#if USE_K64F_ACCELEROMETER
+		// K64F FXOS8700CQ Accelerometer
+	    .addResource(&accel,(bool)false)            // observe on demand ("shake"...)
+#endif // USE_K64F_ACCELEROMETER
                    
         // finalize the configuration...
         .build();
@@ -121,7 +150,7 @@ int main()
     pc.baud(115200);
 	
     // Announce
-    logger.log("\r\n\r\nmbed Cloud Sample Endpoint (%s)",net_get_type());
+    logger.log("\r\n\r\nmbed Connector Sample Endpoint (%s)",net_get_type());
     
     // Configure Device Manager (if enabled)
     DeviceManager *device_manager = NULL;

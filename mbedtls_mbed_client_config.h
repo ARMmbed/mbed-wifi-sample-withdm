@@ -1,16 +1,33 @@
-//----------------------------------------------------------------------------
-// The confidential and proprietary information contained in this file may
-// only be used by a person authorised under and to the extent permitted
-// by a subsisting licensing agreement from ARM Limited or its affiliates.
-//
-// (C) COPYRIGHT 2016 ARM Limited or its affiliates.
-// ALL RIGHTS RESERVED
-//
-// This entire notice must be reproduced on all copies of this file
-// and copies of this file may only be made by a person if such person is
-// permitted to do so under the terms of a subsisting license agreement
-// from ARM Limited or its affiliates.
-//----------------------------------------------------------------------------
+/**
+ *  Minimal configuration for using mbedtls as part of mbed-client
+ *
+ *  NOTE! This is an optimized, minimal configuration for mbed Client.
+ *  We know it works with mbed Client but if you want to add more
+ *  services/communications to the application yourself - please ensure
+ *  you update this configuration accordingly. The default configuration
+ *  can be found from mbedTLS Github:
+ *
+ *  https://github.com/ARMmbed/mbedtls/blob/development/include/mbedtls/config.h
+ *
+ *
+ *  Copyright (C) 2006-2016, ARM Limited, All Rights Reserved
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+ *  not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *  This file is part of mbed TLS (https://tls.mbed.org)
+ */
+
 
 #ifndef MBEDTLS_CUSTOM_CONFIG_H
 #define MBEDTLS_CUSTOM_CONFIG_H
@@ -50,8 +67,8 @@
 // XXX mbedclient needs these: mbedtls_x509_crt_free, mbedtls_x509_crt_init, mbedtls_x509_crt_parse
 #define MBEDTLS_X509_USE_C
 #define MBEDTLS_X509_CRT_PARSE_C
-// a bit wrong way to get mbedtls_ssl_conf_psk:
 
+// XXX: clean these up!!
 #define MBEDTLS_SHA512_C
 #define MBEDTLS_ECDH_C
 #define MBEDTLS_GCM_C
@@ -80,18 +97,11 @@
 // dep of the previous
 #define MBEDTLS_BASE64_C
 
-// Needed by provisioning
-#define MBEDTLS_PEM_WRITE_C
-#define MBEDTLS_CTR_DRBG_MAX_REQUEST 2048
-
-// Needed by update
-#define MBEDTLS_CIPHER_MODE_CTR
-
 // Reduce IO buffer to save RAM, default is 16KB
 #define MBEDTLS_SSL_MAX_CONTENT_LEN 2048
 
 // define to save 8KB RAM at the expense of ROM
-#define MBEDTLS_AES_ROM_TABLES
+#undef MBEDTLS_AES_ROM_TABLES
 
 // Save ROM and a few bytes of RAM by specifying our own ciphersuite list
 #define MBEDTLS_SSL_CIPHERSUITES MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
